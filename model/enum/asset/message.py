@@ -1,0 +1,11 @@
+import enum
+
+
+class Message(enum.StrEnum):
+
+    DOOR_LOCKED = 'DOOR_LOCKED'
+
+    DRAGON_BLOCK = 'DRAGON_BLOCK'
+    DRAGON_BRIBE = 'DRAGON_BRIBE'
+
+    PRINCESS_MESSAGE = 'PRINCESS_MESSAGE'

@@ -1,0 +1,21 @@
+import enum
+
+
+class Sound(enum.StrEnum):
+
+    NONE = 'NONE'
+
+    BACKGROUND = 'BACKGROUND'
+    BUTTON_HIT = 'BUTTON_HIT'
+
+    FLOOR_WALK = 'FLOOR_WALK'
+    WALL_HIT = 'WALL_HIT'
+
+    DOOR_HIT = 'DOOR_HIT'
+    DOOR_UNLOCK = 'DOOR_UNLOCK'
+
+    GEM_PICKUP = 'GEM_PICKUP'
+    KEY_PICKUP = 'KEY_PICKUP'
+
+    DRAGON_ROAR = 'DRAGON_ROAR'
+    PRINCESS_LAUGH = 'PRINCESS_LAUGH'
