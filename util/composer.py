@@ -257,6 +257,7 @@ class Composer:
             self.size,
             self.size
         )
+        self.set_transparency(picture, alpha)
         for gems in range(3):
             if state.inventory.gems <= gems:
                 image = self.assets[f'Image.Item[{Cell.GEM}].Missing']
