@@ -187,10 +187,18 @@ class Composer:
         }
 
     def __compose_maze(self, slide: pptx.slide.Slide, screen: MazeScreen) -> dict[Button, pptx.shapes.picture.Picture]:
-        return self.__paint_state(slide, screen.state, 1.0)
+        return self.__paint_state(slide, screen.state)
 
     def __compose_dialog(self, slide: pptx.slide.Slide, screen: DialogScreen) -> dict[Button, pptx.shapes.picture.Picture]:
-        self.__paint_state(slide, screen.state, 0.5)
+        self.__paint_state(slide, screen.state)
+        picture = slide.shapes.add_picture(
+            self.assets['Image.Menu[BACKGROUND]'],
+            0,
+            0,
+            self.width,
+            self.height
+        )
+        self.set_transparency(picture, 0.5)
         dialog_size = (self.size * 16, self.size * 4)
         dialog_offset = (
             (self.width - dialog_size[0]) / 2,
@@ -226,7 +234,7 @@ class Composer:
             ),
         }
 
-    def __paint_state(self, slide: pptx.slide.Slide, state: State, alpha: float) -> dict[Button, pptx.shapes.picture.Picture]:
+    def __paint_state(self, slide: pptx.slide.Slide, state: State) -> dict[Button, pptx.shapes.picture.Picture]:
         offset = (
             self.size * 5,
             self.size * 1
@@ -249,40 +257,37 @@ class Composer:
                     self.size,
                     self.size
                 )
-                self.set_transparency(picture, alpha * transparency)
-        picture = slide.shapes.add_picture(
+                self.set_transparency(picture, transparency)
+        slide.shapes.add_picture(
             self.assets[f'Image.Maze[{Cell.WIZARD}]'],
             state.position.left * self.size + offset[0],
             state.position.top * self.size + offset[1],
             self.size,
             self.size
         )
-        self.set_transparency(picture, alpha)
         for gems in range(3):
             if state.inventory.gems <= gems:
                 image = self.assets[f'Image.Item[{Cell.GEM}].Missing']
             else:
                 image = self.assets[f'Image.Item[{Cell.GEM}].Having']
-            picture = slide.shapes.add_picture(
+            slide.shapes.add_picture(
                 image,
                 self.size * (1 + gems),
                 self.size,
                 self.size,
                 self.size
             )
-            self.set_transparency(picture, alpha)
         for keys in range(1):
             if state.inventory.keys <= keys:
                 continue
-            picture = slide.shapes.add_picture(
+            slide.shapes.add_picture(
                 self.assets[f'Image.Item[{Cell.KEY}].Having'],
                 self.size * (1 + keys),
                 self.size * 3,
                 self.size,
                 self.size
             )
-            self.set_transparency(picture, alpha)
-        actions = {
+        return {
             Button.UP: slide.shapes.add_picture(
                 self.assets[f'Image.Button[{Button.UP}]'],
                 self.size * 2,
@@ -312,9 +317,6 @@ class Composer:
                 self.size
             ),
         }
-        for picture in actions.values():
-            self.set_transparency(picture, alpha)
-        return actions
 
     def set_transparency(self, picture: pptx.shapes.picture.Picture, transparency: float) -> None:
         blip = picture.element.blipFill.blip
